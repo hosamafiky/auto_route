@@ -8,30 +8,27 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.red,
-      appBar: AppBar(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                AutoRouter.of(context).push(const ProfileRoute());
-              },
-              child: const Text('Go To Profile screen'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                AutoRouter.of(context).push(const AboutRoute());
-              },
-              child: const Text('Go To About Screen'),
-            ),
-          ],
-        ),
-      ),
+    return AutoTabsRouter(
+      routes: const [
+        ProfileRoute(),
+        AboutRoute(),
+      ],
+      builder: (context, child) {
+        final tabsRouter = AutoTabsRouter.of(context);
+        return Scaffold(
+          body: child,
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: tabsRouter.activeIndex,
+            onTap: (index) {
+              tabsRouter.setActiveIndex(index);
+            },
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.label), label: 'Profile'),
+              BottomNavigationBarItem(icon: Icon(Icons.label), label: 'About'),
+            ],
+          ),
+        );
+      },
     );
   }
 }
